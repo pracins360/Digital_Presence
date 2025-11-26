@@ -661,30 +661,40 @@
     }
 
     function initFromUrl() {
-      const params = new URLSearchParams(window.location.search);
-      const mode = params.get("mode");
-      if (mode === "promo" && params.get("biz")) {
-        // Hide generator on small screens if desired? For now we keep both.
-        renderPromoFromParams(params);
-      } else {
-        // No promo parameters, show a default mock
-        const demoParams = new URLSearchParams();
-        demoParams.set("biz", "Thando Fresh Market");
-        demoParams.set("country", "South Africa");
-        demoParams.set("addr", "28 Vilakazi Street, Soweto");
-        demoParams.set("phone", "+27 61 582 1149");
-        demoParams.set("mail", "thandofreshmarket@gmail.com");
-        demoParams.set("profile", "Local family-owned fresh produce shop with fresh fruit & vegetables daily.");
-        demoParams.set("promo", "Buy 2kg potatoes + get 1kg free! Only this week.");
-        const today = todayISO();
-        demoParams.set("start", today);
-        demoParams.set("end", addDaysISO(today, 7));
-        demoParams.set("promoter", "irving@billigue.com");
-        demoParams.set("cta", "whatsapp");
-        renderPromoFromParams(demoParams);
-      }
-      initFormDefaults();
+  const params = new URLSearchParams(window.location.search);
+  const mode = params.get("mode");
+  const generatorPanel = document.getElementById("generatorPanel");
+  const wrapper = document.querySelector(".wrapper");
+
+  if (mode === "promo" && params.get("biz")) {
+    // HIDE the form when we are in promo mode
+    if (generatorPanel) {
+      generatorPanel.style.display = "none";
     }
+    if (wrapper) {
+      wrapper.style.maxWidth = "700px"; // promo page centered, narrower
+    }
+    renderPromoFromParams(params);
+  } else {
+    // No promo parameters, show demo on the right + form on the left
+    const demoParams = new URLSearchParams();
+    demoParams.set("biz", "Thando Fresh Market");
+    demoParams.set("country", "South Africa");
+    demoParams.set("addr", "28 Vilakazi Street, Soweto");
+    demoParams.set("phone", "+27 61 582 1149");
+    demoParams.set("mail", "thandofreshmarket@gmail.com");
+    demoParams.set("profile", "Local family-owned fresh produce shop with fresh fruit & vegetables daily.");
+    demoParams.set("promo", "Buy 2kg potatoes + get 1kg free! Only this week.");
+    const today = todayISO();
+    demoParams.set("start", today);
+    demoParams.set("end", addDaysISO(today, 7));
+    demoParams.set("promoter", "irving@billigue.com");
+    demoParams.set("cta", "whatsapp");
+    renderPromoFromParams(demoParams);
+  }
+  initFormDefaults();
+}
+
 
     window.addEventListener("DOMContentLoaded", initFromUrl);
   </script>
